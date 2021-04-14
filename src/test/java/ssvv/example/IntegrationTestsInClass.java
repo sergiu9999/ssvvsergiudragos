@@ -22,7 +22,7 @@ import java.util.UUID;
 /**
  * Unit test for simple App.
  */
-public class AppTest
+public class IntegrationTestsInClass
 {
 
     private Service service;
@@ -42,7 +42,7 @@ public class AppTest
     }
 
     @Test
-    public void addStudentTest_studentAddedSuccessfully() {
+    public void test_addstudent() {
         var initialSize = service.getAllStudenti().spliterator().getExactSizeIfKnown();
 
         service.addStudent(new Student(UUID.randomUUID().toString(), "Drg Sab", 934, "dragos.sabau@hibyte.ro"));
@@ -52,25 +52,10 @@ public class AppTest
         assertEquals(initialSize + 1, afterAddSize);
     }
 
-    @Test
-    public  void addStudentDuplicateID_wontAddNewEntry() {
-        var studentId = UUID.randomUUID().toString();
 
-        var initialSize = service.getAllStudenti().spliterator().getExactSizeIfKnown();
-
-        service.addStudent(new Student(studentId, "Drg Sab", 934, "dragos.sabau@hibyte.ro"));
-
-        var afterAddSize = service.getAllStudenti().spliterator().getExactSizeIfKnown();
-
-        assertEquals(initialSize + 1, afterAddSize);
-
-        service.addStudent(new Student(studentId, "Drg Sab", 934, "dragos.sabau@hibyte.ro"));
-
-        assertEquals(initialSize + 1, afterAddSize);
-    }
 
     @Test
-    public void addAssignment_assignmentAddedSuccessfully() {
+    public void test_addassigment() {
         var initialSize = service.getAllTeme().spliterator().getExactSizeIfKnown();
 
         service.addTema(new Tema(UUID.randomUUID().toString(), "Lab 3 Assignment", 3, 4));
@@ -80,23 +65,9 @@ public class AppTest
         assertEquals(initialSize + 1, afterAddSize);
     }
 
-    @Test
-    public void addAssignment_emptyDescription_wontAddNewEntry() {
-        Assertions.assertThrows(ValidationException.class, () -> service.addTema(new Tema(UUID.randomUUID().toString(), "", 3, 4)));
-    }
 
     @Test
-    public void addAssignment_emptyId_wontAddNewEntry() {
-        Assertions.assertThrows(ValidationException.class, () -> service.addTema(new Tema("", "descr", 3, 4)));
-    }
-
-    @Test
-    public void addAssignment_deadlineNotInLimits_wontAddNewEntry() {
-        Assertions.assertThrows(ValidationException.class, () -> service.addTema(new Tema(UUID.randomUUID().toString(), "descr", 3, 25)));
-    }
-
-    @Test
-    public void addStudent_addAssignmentForStudent() {
+    public void test_addgrade() {
         var studentId = UUID.randomUUID().toString();
 
         var initialSize = service.getAllStudenti().spliterator().getExactSizeIfKnown();
@@ -107,7 +78,7 @@ public class AppTest
 
         assertEquals(initialSize + 1, afterAddSize);
 
-         var initialSizeAssignment = service.getAllTeme().spliterator().getExactSizeIfKnown();
+        var initialSizeAssignment = service.getAllTeme().spliterator().getExactSizeIfKnown();
 
         service.addTema(new Tema(UUID.randomUUID().toString(), "Lab 3 Assignment", 3, 4));
 
@@ -117,7 +88,7 @@ public class AppTest
     }
 
     @Test
-    public void addStudent_addAssignment_addGrade_test() {
+    public void test_integration() {
         var studentId = UUID.randomUUID().toString();
 
         var initialSize = service.getAllStudenti().spliterator().getExactSizeIfKnown();
@@ -128,9 +99,9 @@ public class AppTest
 
         assertEquals(initialSize + 1, afterAddSize);
 
-         var initialSizeAssignment = service.getAllTeme().spliterator().getExactSizeIfKnown();
+        var initialSizeAssignment = service.getAllTeme().spliterator().getExactSizeIfKnown();
 
-         var temaId = UUID.randomUUID().toString();
+        var temaId = UUID.randomUUID().toString();
 
         service.addTema(new Tema(temaId, "Lab 3 Assignment", 11, 12));
 
@@ -140,6 +111,4 @@ public class AppTest
 
         service.addNota(new Nota(UUID.randomUUID().toString(), studentId, temaId, 9, LocalDate.parse("15/12/2018", DateTimeFormatter.ofPattern("dd/MM/yyyy"))), "Very good job");
     }
-
-
 }
